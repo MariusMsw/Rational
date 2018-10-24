@@ -23,7 +23,7 @@ public:
 	Rational &operator *= (int);
 
 	Rational &operator /= (Rational);
-	Rational &operator /= (int);
+	Rational &operator /= (int); 
 
 private:
 	int m_num;
