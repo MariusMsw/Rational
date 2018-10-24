@@ -1,3 +1,8 @@
+#include "Rational.hpp"
+/***************************************************************************************************
+Object-oriented programming Homework
+Author: Mihai Liviu-Marius
+***************************************************************************************************/
 #include "pch.h"
 #include "Rational.hpp"
 
@@ -23,7 +28,7 @@ void Rational::get_canonical_function()
 
 }
 
-Rational::Rational(int num = 0, int denom = 1)
+Rational::Rational(const int num = 0, const int denom = 1)
 {
 	m_num = num;
 	m_denom = denom;
@@ -40,12 +45,18 @@ Rational::~Rational()
 {
 }
 
+void Rational::set_num_and_denom(int num_value, int denom_value)
+{
+	this->m_num = num_value;
+	this->m_denom = denom_value;
+}
+
 void Rational::set_num(int value)
 {
 	this->m_num = value;
 }
 
-int Rational::get_num()
+int Rational::get_num() const
 {
 	return this->m_num;
 }
@@ -55,12 +66,12 @@ void Rational::set_denom(int value)
 	this->m_denom = value;
 }
 
-int Rational::get_denom()
+int Rational::get_denom() const
 {
 	return this->m_denom;
 }
 
-Rational & Rational::operator += (Rational rational_number)
+Rational & Rational::operator += (const Rational rational_number)
 {
 	m_num *= rational_number.m_denom;
 	m_num += rational_number.m_num * m_denom;
@@ -69,15 +80,14 @@ Rational & Rational::operator += (Rational rational_number)
 	return *this;
 }
 
-Rational & Rational::operator += (int integer_number)
+Rational & Rational::operator += (const int integer_number)
 {
-	integer_number = integer_number * m_denom;
-	m_num += integer_number;
+	m_num += integer_number * m_denom;
 	get_canonical_function();
 	return *this;
 }
 
-Rational & Rational::operator -= (Rational rational_number)
+Rational & Rational::operator -= (const Rational rational_number)
 {
 	m_num *= rational_number.m_denom;
 	m_num -= rational_number.m_num * m_denom;
@@ -86,15 +96,14 @@ Rational & Rational::operator -= (Rational rational_number)
 	return *this;
 }
 
-Rational & Rational::operator -= (int integer_number)
+Rational & Rational::operator -= (const int integer_number)
 {
-	integer_number = integer_number * m_denom;
-	m_num -= integer_number;
+	m_num -= integer_number * m_denom;
 	get_canonical_function();
 	return *this;
 }
 
-Rational & Rational::operator *= (Rational rational_number)
+Rational & Rational::operator *= (const Rational rational_number)
 {
 	m_num *= rational_number.m_num;
 	m_denom *= rational_number.m_denom;
@@ -102,14 +111,14 @@ Rational & Rational::operator *= (Rational rational_number)
 	return *this;
 }
 
-Rational & Rational::operator *= (int integer_number)
+Rational & Rational::operator *= (const int integer_number)
 {
 	m_num *= integer_number;
 	get_canonical_function();
 	return *this;
 }
 
-Rational & Rational::operator /= (Rational rational_number)
+Rational & Rational::operator /= (const Rational rational_number)
 {
 	m_num *= rational_number.m_denom; 
 	m_denom *= rational_number.m_num;
@@ -117,7 +126,7 @@ Rational & Rational::operator /= (Rational rational_number)
 	return *this;
 }
 
-Rational & Rational::operator /= (int integer_number)
+Rational & Rational::operator /= (const int integer_number)
 {
 	m_denom *= integer_number;
 	get_canonical_function();
