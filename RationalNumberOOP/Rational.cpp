@@ -111,7 +111,7 @@ Rational & Rational::operator *= (int integer_number)
 
 Rational & Rational::operator /= (Rational rational_number)
 {
-	m_num *= rational_number.m_denom;
+	m_num *= rational_number.m_denom; 
 	m_denom *= rational_number.m_num;
 	get_canonical_function();
 	return *this;
