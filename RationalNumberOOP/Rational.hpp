@@ -2,12 +2,15 @@
 Object-oriented programming Homework
 Author: Mihai Liviu-Marius
 ***************************************************************************************************/
+
 #pragma once
 #include <iostream>
+#include <cmath>
+
 class Rational
 {
 public:
-	Rational(const int, const int);
+	Rational(int num = 0, int denom = 0);
 	Rational(const Rational&);
 	~Rational();
 
@@ -19,17 +22,43 @@ public:
 	void set_denom(int);
 	int get_denom() const;
 
-	Rational &operator += (const Rational);
-	Rational &operator += (const int);
+	void operator += (const Rational&);
+	void operator += (const int);
 
-	Rational &operator -= (const Rational);
-	Rational &operator -= (const int);
+	void operator -= (const Rational&);
+	void operator -= (const int);
 
-	Rational &operator *= (const Rational);
-	Rational &operator *= (const int);
+	void operator *= (const Rational&);
+	void operator *= (const int);
 
-	Rational &operator /= (const Rational);
-	Rational &operator /= (const int); 
+	void operator /= (const Rational&);
+	void operator /= (const int);
+
+	Rational &operator + ();
+	Rational &operator - ();
+
+	Rational operator + (Rational&);
+	Rational operator +(int);
+	friend Rational operator+ (double, Rational&);
+
+	Rational operator- (Rational&);
+	Rational operator- (int);
+	friend Rational operator- (double, Rational&);
+
+	Rational operator* (Rational&);
+	Rational operator* (int);
+	friend Rational operator* (double, Rational&);
+
+	Rational operator/ (Rational&);
+	Rational operator/ (int);
+	friend Rational operator/ (double, Rational&);
+
+	Rational operator^ (int);
+
+	friend Rational double_to_rational(double);
+
+	friend std::ostream& operator<<(std::ostream &, const Rational&);
+	friend std::istream & operator>>(std::istream &, Rational &);
 
 private:
 	int m_num;
