@@ -336,9 +336,161 @@ Rational Rational::operator^(int exponent)
 	}
 }
 
-std::istream &operator>>(std::istream & stream, Rational &rational_number)
+bool operator==(Rational &first, Rational &second)
 {
-	stream >> rational_number.m_num >> rational_number.m_denom;
+	first.get_canonical_function();
+	second.get_canonical_function();
+	if (first.m_num == second.m_num && first.m_denom == second.m_denom)
+		return true;
+	return false;
+
+}
+
+bool operator==(Rational &rational_number, int integer_number)
+{
+	rational_number.get_canonical_function();
+	if (rational_number.m_num / rational_number.m_denom == integer_number)
+		return true;
+	return false;
+}
+
+bool operator==(int integer_number, Rational &rational_number)
+{
+	rational_number.get_canonical_function();
+	if (rational_number.m_num / rational_number.m_denom == integer_number)
+		return true;
+	return false;
+}
+
+
+bool operator!=(Rational &first, Rational &second)
+{
+	first.get_canonical_function();
+	second.get_canonical_function();
+	if (first.m_num == second.m_num && first.m_denom == second.m_denom)
+		return false;
+	return true;
+}
+
+
+bool operator!=(Rational &rational_number, int integer_number)
+{
+	rational_number.get_canonical_function();
+	if (rational_number.m_num / rational_number.m_denom == integer_number)
+		return false;
+	return true;
+}
+
+bool operator!=(int integer_number, Rational &rational_number)
+{
+	rational_number.get_canonical_function();
+	if (rational_number.m_num / rational_number.m_denom == integer_number)
+		return false;
+	return true;
+}
+
+bool operator<(Rational &first, Rational &second)
+{
+	if (first.m_num * second.m_denom < second.m_num * first.m_denom)
+		return true;
+	return false;
+}
+
+bool operator<(Rational &rational_number, int integer_number)
+{
+	if (rational_number.m_num < integer_number * rational_number.m_denom)
+		return true;
+	return false;
+}
+
+bool operator<(int integer_number, Rational &rational_number)
+{
+	if (integer_number * rational_number.m_denom < rational_number.m_num)
+		return true;
+	return false;
+}
+
+bool operator<=(Rational &first, Rational &second)
+{
+	if (first.m_num * second.m_denom <= second.m_num * first.m_denom)
+		return true;
+	return false;
+}
+
+bool operator<=(Rational &rational_number, int integer_number)
+{
+	if (rational_number.m_num <= integer_number * rational_number.m_denom)
+		return true;
+	return false;
+}
+
+bool operator<=(int integer_number, Rational &rational_number)
+{
+	if (integer_number * rational_number.m_denom <= rational_number.m_num)
+		return true;
+	return false;
+}
+
+bool operator>(Rational &first, Rational &second)
+{
+	if (first.m_num * second.m_denom > second.m_num * first.m_denom)
+		return true;
+	return false;
+}
+
+bool operator>(Rational &rational_number, int integer_number)
+{
+	if (rational_number.m_num > integer_number * rational_number.m_denom)
+		return true;
+	return false;
+}
+
+bool operator>(int integer_number, Rational &rational_number)
+{
+	if (integer_number * rational_number.m_denom > rational_number.m_num)
+		return true;
+	return false;
+}
+
+bool operator>=(Rational &first, Rational &second)
+{
+	if (first.m_num * second.m_denom >= second.m_num * first.m_denom)
+		return true;
+	return false;
+}
+
+bool operator>=(Rational &rational_number, int integer_number)
+{
+	if (rational_number.m_num >= integer_number * rational_number.m_denom)
+		return true;
+	return false;
+}
+
+bool operator>=(int integer_number, Rational &rational_number)
+{
+	if (integer_number * rational_number.m_denom >= rational_number.m_num)
+		return true;
+	return false;
+}
+
+
+std::istream& operator>> (std::istream& stream, Rational& rational_number) {
+	std::string input;
+	stream >> input;
+
+	size_t backspace_pos = input.find('/');
+	bool denom_exists = (backspace_pos != std::string::npos);
+
+	if (denom_exists) {
+		rational_number.m_num = std::stoi(input.substr(0, backspace_pos));
+		rational_number.m_denom = std::stoi(input.substr(backspace_pos + 1, input.length()));
+	}
+	else {
+		rational_number.m_num = std::stoi(input);
+		rational_number.m_denom = 1;
+	}
+
+	rational_number.get_canonical_function();
 	return stream;
 }
 

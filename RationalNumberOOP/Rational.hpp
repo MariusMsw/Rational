@@ -6,7 +6,7 @@ Author: Mihai Liviu-Marius
 #pragma once
 #include <iostream>
 #include <cmath>
-
+#include <string>
 class Rational
 {
 public:
@@ -56,6 +56,30 @@ public:
 	Rational operator^ (int);
 
 	friend Rational double_to_rational(double);
+
+	friend bool operator == (Rational&, Rational&);
+	friend bool operator == (Rational&, int);
+	friend bool operator == (int, Rational&);
+
+	friend bool operator != (Rational&, Rational&);
+	friend bool operator != (Rational&, int);
+	friend bool operator != (int, Rational&);
+
+	friend bool operator < (Rational&, Rational&);
+	friend bool operator < (Rational&, int);
+	friend bool operator < (int, Rational&);
+
+	friend bool operator <= (Rational&, Rational&);
+	friend bool operator <= (Rational&, int);
+	friend bool operator <= (int, Rational&);
+
+	friend bool operator > (Rational&, Rational&);
+	friend bool operator > (Rational&, int);
+	friend bool operator > (int, Rational&);
+
+	friend bool operator >= (Rational&, Rational&);
+	friend bool operator >= (Rational&, int);
+	friend bool operator >= (int, Rational&);
 
 	friend std::ostream& operator<<(std::ostream &, const Rational&);
 	friend std::istream & operator>>(std::istream &, Rational &);
