@@ -22,17 +22,19 @@ public:
 	void set_denom(int);
 	int get_denom() const;
 
-	void operator += (const Rational&);
-	void operator += (const int);
+	std::string to_string_function();
 
-	void operator -= (const Rational&);
-	void operator -= (const int);
+	Rational &operator += (const Rational&);
+	Rational &operator += (const int);
 
-	void operator *= (const Rational&);
-	void operator *= (const int);
+	Rational &operator -= (const Rational&);
+	Rational &operator -= (const int);
 
-	void operator /= (const Rational&);
-	void operator /= (const int);
+	Rational &operator *= (const Rational&);
+	Rational &operator *= (const int);
+
+	Rational &operator /= (const Rational&);
+	Rational &operator /= (const int);
 
 	Rational &operator + ();
 	Rational &operator - ();
