@@ -6,33 +6,22 @@ Author: Mihai Liviu-Marius
 #include "pch.h"
 #include "Rational.hpp"
 
-std::string Rational::to_string_function()
+std::string Rational::rational_to_string()
 {
 	std::string string_number;
 	if (m_denom == 1)
+	{
 		string_number = std::to_string(this->m_num);
+	}
 	else
 	{
-		if (this->m_num < 0 && this->m_denom < 0)
-		{
-			string_number = std::to_string(-m_num) + "/" + std::to_string(-m_denom);
-		}
-		else if (m_num < 0 && m_denom > 0)
-		{
-			string_number = std::to_string(-m_num) + "/" + std::to_string(m_denom);
-		}
-		else if (m_num > 0 && m_denom < 0)
-		{
-			string_number = std::to_string(m_num) + "/" + std::to_string(-m_denom);
-		}
-		else {
-			string_number = std::to_string(m_num) + "/" + std::to_string(m_denom);
-		}
+		string_number = std::to_string(m_num) + "/" + std::to_string(m_denom);
 	}
+
 	return string_number;
 }
 
-void Rational::get_canonical_function()
+void Rational::simplify_rational_number()
 {
 	int copy_num = abs(this->m_num);
 	int copy_denom = abs(this->m_denom);
@@ -40,14 +29,6 @@ void Rational::get_canonical_function()
 	if (copy_num == 0 && copy_denom != 0)
 		return;
 
-	if (copy_num == 0 && copy_denom == 0)
-	{
-		std::cout << "0/0 division!";
-		return;
-	}
-
-	if (copy_denom != 0)
-	{
 		while (copy_num != copy_denom)
 		{
 			if (copy_num > copy_denom)
@@ -55,12 +36,6 @@ void Rational::get_canonical_function()
 			else
 				copy_denom = copy_denom - copy_num;
 		}
-	}
-	else
-	{
-		std::cout << "Division by 0 is forbidden!";
-		exit(0);
-	}
 
 	this->m_num /= copy_num;
 	this->m_denom /= copy_denom;
@@ -70,21 +45,37 @@ void Rational::get_canonical_function()
 		this->m_num = -(this->m_num);
 		this->m_denom = -(this->m_denom);
 	}
-
 }
 
 Rational::Rational(int num, int denom)
-{
-	m_num = num;
-	m_denom = denom;
+{	
+	if (denom == 0)
+	{
+		std::cout << "The denominator can't be 0!";
+		exit(0);
+	}
+
+	if (denom < 0)
+	{
+		m_num = -num;
+		m_denom = abs(denom);
+	}
+
+	else
+	{
+		m_num = num;
+		m_denom = denom;
+	}
+
 	if (num != 0 && denom != 1)
-	get_canonical_function();
+	simplify_rational_number();
 }
 
 Rational::Rational(const Rational &rational)
 {
 	m_num = rational.m_num;
 	m_denom = rational.m_denom;
+	simplify_rational_number();
 }
 
 Rational::~Rational()
@@ -95,11 +86,13 @@ void Rational::set_num_and_denom(int num_value, int denom_value)
 {
 	this->m_num = num_value;
 	this->m_denom = denom_value;
+	simplify_rational_number();
 }
 
 void Rational::set_num(int value)
 {
 	this->m_num = value;
+	simplify_rational_number();
 }
 
 int Rational::get_num() const
@@ -110,6 +103,7 @@ int Rational::get_num() const
 void Rational::set_denom(int value)
 {
 	this->m_denom = value;
+	simplify_rational_number();
 }
 
 int Rational::get_denom() const
@@ -122,14 +116,14 @@ Rational &Rational::operator += (const Rational &rational_number)
 	m_num *= rational_number.m_denom;
 	m_num += rational_number.m_num * m_denom;
 	m_denom *= rational_number.m_denom;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
-Rational &Rational::operator += (const int integer_number)
+Rational &Rational::operator += (int integer_number)
 {
 	m_num += integer_number * m_denom;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
@@ -138,14 +132,14 @@ Rational &Rational::operator -= (const Rational &rational_number)
 	m_num *= rational_number.m_denom;
 	m_num -= rational_number.m_num * m_denom;
 	m_denom *= rational_number.m_denom;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
-Rational &Rational::operator -= (const int integer_number)
+Rational &Rational::operator -= (int integer_number)
 {
 	m_num -= integer_number * m_denom;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
@@ -153,14 +147,14 @@ Rational &Rational::operator *= (const Rational &rational_number)
 {
 	m_num *= rational_number.m_num;
 	m_denom *= rational_number.m_denom;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
-Rational &Rational::operator *= (const int integer_number)
+Rational &Rational::operator *= (int integer_number)
 {
 	m_num *= integer_number;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
@@ -168,20 +162,20 @@ Rational &Rational::operator /= (const Rational &rational_number)
 {
 	m_num *= rational_number.m_denom; 
 	m_denom *= rational_number.m_num;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 	
 }
 
-Rational &Rational::operator /= (const int integer_number)
+Rational &Rational::operator /= (int integer_number)
 {
 	m_denom *= integer_number;
-	this->get_canonical_function();
+	this->simplify_rational_number();
 	return *this;
 }
 
 Rational & Rational::operator+()
-{
+{	
 	return *this;
 }
 
@@ -191,320 +185,225 @@ Rational & Rational::operator-()
 	return *this;
 }
 
-Rational double_to_rational(double double_number)
+Rational operator+(const Rational &left, const Rational &right)
 {
-	int int_part = (int)floor(double_number);
-	double frac_part = double_number - int_part;
-	int i = 0;
+	Rational result(left);
+	result += right;
+	return result;
+}
 
-	while (frac_part != 0)
+Rational operator+(const Rational &rational_number, int integer_number)
+{
+	Rational result(rational_number);
+	result += integer_number;
+	return result;
+}
+
+Rational operator+(int integer_number, const Rational &rational_number)
+{
+	Rational result(rational_number);
+	result += integer_number;
+	return result;
+}
+
+Rational operator-(const Rational &left, const Rational&right)
+{
+	Rational result(left);
+	result -= right;
+	return result;
+}
+
+Rational operator-(const Rational &rational_number, int integer_number)
+{
+	Rational result(rational_number);
+	result -= integer_number;
+	return result;
+}
+
+Rational operator-(int integer_number, const Rational &rational_number)
+{
+	Rational result(rational_number);
+	result -= integer_number;
+	return -result;
+}
+
+Rational operator*(const Rational &left, const Rational &right)
+{
+	Rational result(left);
+	result *= right;
+	return result;
+}
+
+Rational operator*(const Rational &rational_number, int integer_number)
+{
+	Rational result(rational_number);
+	result *= integer_number;
+	return result;
+}
+
+Rational operator*(int integer_number, const Rational &rational_number)
+{
+	Rational result(rational_number);
+	result *= integer_number;
+	return result;
+}
+
+Rational operator/(const Rational &left, const Rational &right)
+{
+	Rational result(left);
+	result /= right;
+	return result;
+}
+
+Rational operator/(const Rational &rational_number, int integer_number)
+{
+	Rational result(rational_number);
+	result /= integer_number;
+	return result;
+}
+
+Rational operator/(int integer_number, const Rational &rational_number)
+{
+	Rational result(rational_number);
+	result /= integer_number;
+	return result^(-1);
+}
+
+Rational operator^(const Rational &base, int exponent)
+{
+	Rational result(base);
+
+	if (exponent == -1)
 	{
-		frac_part *= 10;
-		int_part *= 10;
-		int_part += (int)floor(frac_part);
-		frac_part -= floor(frac_part);
-		i++;
-	}
+		result.m_num = base.m_denom;
+		result.m_denom = base.m_num;
 
-	Rational *result = new Rational(int_part, (int)pow(10, i));
-
-	return *result;
-}
-
-Rational Rational::operator+(Rational &other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num * other.m_denom + this->m_denom * other.m_num;
-	res->m_denom = this->m_denom * other.m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator+(int other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num + other * this->m_denom;
-	res->m_denom = this->m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational operator+(double double_number, Rational &rational_number)
-{
-	Rational *res = new Rational(rational_number);
-	Rational other = double_to_rational(double_number);
-
-	res->m_num = rational_number.m_num * other.m_denom + rational_number.m_denom * other.m_num;
-	res->m_denom = rational_number.m_denom * other.m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator-(Rational &other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num * other.m_denom - this->m_denom * other.m_num;
-	res->m_denom = this->m_denom * other.m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator-(int other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num - other * this->m_denom;
-	res->m_denom = this->m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational operator-(double double_number, Rational &rational_number)
-{
-	Rational *res = new Rational(rational_number);
-	Rational other = double_to_rational(double_number);
-
-	res->m_num = rational_number.m_num * other.m_denom - rational_number.m_denom * other.m_num;
-	res->m_denom = rational_number.m_denom * other.m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator*(Rational &other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num * other.m_num;
-	res->m_denom = this->m_denom * other.m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator*(int other)
-{
-		Rational *res = new Rational();
-		res->m_num = this->m_num * other;
-		res->m_denom = this->m_denom;
-		res->get_canonical_function();
-
-		return *res;
-}
-
-Rational operator*(double double_number, Rational &rational_number)
-{
-	Rational *res = new Rational(rational_number);
-	Rational other = double_to_rational(double_number);
-
-	res->m_num = rational_number.m_num * other.m_num;
-	res->m_denom = rational_number.m_denom * other.m_denom;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator/(Rational &other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num * other.m_denom;
-	res->m_denom = this->m_denom * other.m_num;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator/(int other)
-{
-	Rational *res = new Rational();
-
-	res->m_num = this->m_num;
-	res->m_denom = this->m_denom * other;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational operator/(double double_number, Rational &rational_number)
-{
-	Rational *res = new Rational(rational_number);
-	Rational other = double_to_rational(double_number);
-
-	res->m_num = other.m_num * rational_number.m_denom;
-	res->m_denom = other.m_denom * rational_number.m_num;
-	res->get_canonical_function();
-
-	return *res;
-}
-
-Rational Rational::operator^(int exponent)
-{
-	Rational *res = new Rational();
-
-	if (exponent == -1) {
-		res->m_num = this->m_denom;
-		res->m_denom = this->m_num;
-
-		if (res->m_denom < 0) {
-			res->m_num *= -1;
-			res->m_denom *= -1;
+		if (result.m_denom < 0) {
+			result.m_num *= -1;
+			result.m_denom *= -1;
 		}
 
-		return *res;
+		return result;
 	}
-	else {
-		res->m_num = (int)pow(this->m_num, exponent);
-		res->m_denom = (int)pow(this->m_denom, exponent);
-		res->get_canonical_function();
+	else
+	{
+		result.m_num = (int)pow(result.m_num, exponent);
+		result.m_denom = (int)pow(result.m_denom, exponent);
+		result.simplify_rational_number();
 
-		return *res;
+		return result;
 	}
 }
 
-bool operator==(Rational &first, Rational &second)
+bool operator==(const Rational &first, const Rational &second)
 {
-	first.get_canonical_function();
-	second.get_canonical_function();
-	if (first.m_num == second.m_num && first.m_denom == second.m_denom)
-		return true;
-	return false;
+	Rational first_copy(first), second_copy(second);
+	first_copy.simplify_rational_number();
+	second_copy.simplify_rational_number();
+	return (first_copy.m_num == second_copy.m_num && first_copy.m_denom == second_copy.m_denom);
 
 }
 
-bool operator==(Rational &rational_number, int integer_number)
+bool operator==(const Rational &rational_number, int integer_number)
 {
-	rational_number.get_canonical_function();
-	if (rational_number.m_num / rational_number.m_denom == integer_number)
-		return true;
-	return false;
+	Rational rational_number_copy(rational_number);
+	rational_number_copy.simplify_rational_number();
+	return (rational_number_copy.m_num / rational_number_copy.m_denom == integer_number);
 }
 
-bool operator==(int integer_number, Rational &rational_number)
+bool operator==(int integer_number, const Rational &rational_number)
 {
-	rational_number.get_canonical_function();
-	if (rational_number.m_num / rational_number.m_denom == integer_number)
-		return true;
-	return false;
-}
-
-
-bool operator!=(Rational &first, Rational &second)
-{
-	first.get_canonical_function();
-	second.get_canonical_function();
-	if (first.m_num == second.m_num && first.m_denom == second.m_denom)
-		return false;
-	return true;
+	Rational rational_number_copy(rational_number);
+	rational_number_copy.simplify_rational_number();
+	return (rational_number_copy.m_num / rational_number_copy.m_denom == integer_number);
 }
 
 
-bool operator!=(Rational &rational_number, int integer_number)
+bool operator!=(const Rational &first, const Rational &second)
 {
-	rational_number.get_canonical_function();
-	if (rational_number.m_num / rational_number.m_denom == integer_number)
-		return false;
-	return true;
+	Rational first_copy(first), second_copy(second);
+	first_copy.simplify_rational_number();
+	second_copy.simplify_rational_number();
+	return !(first_copy == second_copy);
 }
 
-bool operator!=(int integer_number, Rational &rational_number)
+
+bool operator!=(const Rational &rational_number, int integer_number)
 {
-	rational_number.get_canonical_function();
-	if (rational_number.m_num / rational_number.m_denom == integer_number)
-		return false;
-	return true;
+	Rational rational_number_copy(rational_number);
+	rational_number_copy.simplify_rational_number();
+	return !(rational_number_copy == integer_number);
+		
 }
 
-bool operator<(Rational &first, Rational &second)
+bool operator!=(int integer_number, const Rational &rational_number)
 {
-	if (first.m_num * second.m_denom < second.m_num * first.m_denom)
-		return true;
-	return false;
+	Rational rational_number_copy(rational_number);
+	rational_number_copy.simplify_rational_number();
+	return !(integer_number == rational_number_copy);
 }
 
-bool operator<(Rational &rational_number, int integer_number)
+bool operator<(const Rational &first, const Rational &second)
 {
-	if (rational_number.m_num < integer_number * rational_number.m_denom)
-		return true;
-	return false;
+	return (first.m_num * second.m_denom < second.m_num * first.m_denom);
 }
 
-bool operator<(int integer_number, Rational &rational_number)
+bool operator<(const Rational &rational_number, int integer_number)
 {
-	if (integer_number * rational_number.m_denom < rational_number.m_num)
-		return true;
-	return false;
+	return (rational_number.m_num < integer_number * rational_number.m_denom);
 }
 
-bool operator<=(Rational &first, Rational &second)
+bool operator<(int integer_number, const Rational &rational_number)
 {
-	if (first.m_num * second.m_denom <= second.m_num * first.m_denom)
-		return true;
-	return false;
+	return (integer_number * rational_number.m_denom < rational_number.m_num);
 }
 
-bool operator<=(Rational &rational_number, int integer_number)
+bool operator<=(const Rational &first, const Rational &second)
 {
-	if (rational_number.m_num <= integer_number * rational_number.m_denom)
-		return true;
-	return false;
+	return (first.m_num * second.m_denom <= second.m_num * first.m_denom);
+
 }
 
-bool operator<=(int integer_number, Rational &rational_number)
+bool operator<=(const Rational &rational_number, int integer_number)
 {
-	if (integer_number * rational_number.m_denom <= rational_number.m_num)
-		return true;
-	return false;
+	return (rational_number.m_num <= integer_number * rational_number.m_denom);
 }
 
-bool operator>(Rational &first, Rational &second)
+bool operator<=(int integer_number, const Rational &rational_number)
 {
-	if (first.m_num * second.m_denom > second.m_num * first.m_denom)
-		return true;
-	return false;
+	return (integer_number * rational_number.m_denom <= rational_number.m_num);
+
 }
 
-bool operator>(Rational &rational_number, int integer_number)
+bool operator>(const Rational &first, const Rational &second)
 {
-	if (rational_number.m_num > integer_number * rational_number.m_denom)
-		return true;
-	return false;
+	return !(first < second);
 }
 
-bool operator>(int integer_number, Rational &rational_number)
+bool operator>(const Rational &rational_number, int integer_number)
 {
-	if (integer_number * rational_number.m_denom > rational_number.m_num)
-		return true;
-	return false;
+	return !(rational_number < integer_number);
 }
 
-bool operator>=(Rational &first, Rational &second)
+bool operator>(int integer_number, const Rational &rational_number)
 {
-	if (first.m_num * second.m_denom >= second.m_num * first.m_denom)
-		return true;
-	return false;
+	return !(integer_number < rational_number);
 }
 
-bool operator>=(Rational &rational_number, int integer_number)
+bool operator>=(const Rational &first, const Rational &second)
 {
-	if (rational_number.m_num >= integer_number * rational_number.m_denom)
-		return true;
-	return false;
+	return (first.m_num * second.m_denom >= second.m_num * first.m_denom);
 }
 
-bool operator>=(int integer_number, Rational &rational_number)
+bool operator>=(const Rational &rational_number, int integer_number)
 {
-	if (integer_number * rational_number.m_denom >= rational_number.m_num)
-		return true;
-	return false;
+	return (rational_number.m_num >= integer_number * rational_number.m_denom);
+}
+
+bool operator>=(int integer_number, const Rational &rational_number)
+{
+	return (integer_number * rational_number.m_denom >= rational_number.m_num);
+
 }
 
 
@@ -524,7 +423,7 @@ std::istream& operator>> (std::istream& stream, Rational& rational_number) {
 		rational_number.m_denom = 1;
 	}
 
-	rational_number.get_canonical_function();
+	rational_number.simplify_rational_number();
 	return stream;
 }
 

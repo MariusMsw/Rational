@@ -7,6 +7,7 @@ Author: Mihai Liviu-Marius
 #include <iostream>
 #include <cmath>
 #include <string>
+
 class Rational
 {
 public:
@@ -22,75 +23,70 @@ public:
 	void set_denom(int);
 	int get_denom() const;
 
-	std::string to_string_function();
+	std::string rational_to_string();
 
 	Rational &operator += (const Rational&);
-	Rational &operator += (const int);
+	Rational &operator += (int);
 
 	Rational &operator -= (const Rational&);
-	Rational &operator -= (const int);
+	Rational &operator -= (int);
 
 	Rational &operator *= (const Rational&);
-	Rational &operator *= (const int);
+	Rational &operator *= (int);
 
 	Rational &operator /= (const Rational&);
-	Rational &operator /= (const int);
+	Rational &operator /= (int);
 
 	Rational &operator + ();
 	Rational &operator - ();
 
-	Rational operator + (Rational&);
-	Rational operator +(int);
-	friend Rational operator+ (double, Rational&);
+	friend Rational operator + (const Rational&, const Rational&);
+	friend Rational operator +(const Rational&, int);
+	friend Rational operator+ (int, const Rational&);
 
-	Rational operator- (Rational&);
-	Rational operator- (int);
-	friend Rational operator- (double, Rational&);
+	friend Rational operator- (const Rational&, const Rational&);
+	friend Rational operator- (const Rational&, int);
+	friend Rational operator- (int, const Rational&);
 
-	Rational operator* (Rational&);
-	Rational operator* (int);
-	friend Rational operator* (double, Rational&);
+	friend Rational operator* (const Rational&, const Rational&);
+	friend Rational operator* (const Rational&, int);
+	friend Rational operator* (int, const Rational&);
 
-	Rational operator/ (Rational&);
-	Rational operator/ (int);
-	friend Rational operator/ (double, Rational&);
+	friend Rational operator/ (const Rational&, const Rational&);
+	friend Rational operator/ (const Rational&, int);
+	friend Rational operator/ (int, const Rational&);
 
-	Rational operator^ (int);
+	friend Rational operator^ (const Rational &, int);
 
-	friend Rational double_to_rational(double);
+	friend bool operator == (const Rational&, const Rational&);
+	friend bool operator == (const Rational&, int);
+	friend bool operator == (int, const Rational&);
 
-	friend bool operator == (Rational&, Rational&);
-	friend bool operator == (Rational&, int);
-	friend bool operator == (int, Rational&);
+	friend bool operator != (const Rational&, const Rational&);
+	friend bool operator != (const Rational&, int);
+	friend bool operator != (int, const Rational&);
 
-	friend bool operator != (Rational&, Rational&);
-	friend bool operator != (Rational&, int);
-	friend bool operator != (int, Rational&);
+	friend bool operator < (const Rational&, const Rational&);
+	friend bool operator < (const Rational&, int);
+	friend bool operator < (int, const Rational&);
 
-	friend bool operator < (Rational&, Rational&);
-	friend bool operator < (Rational&, int);
-	friend bool operator < (int, Rational&);
+	friend bool operator <= (const Rational&, const Rational&);
+	friend bool operator <= (const Rational&, int);
+	friend bool operator <= (int, const Rational&);
 
-	friend bool operator <= (Rational&, Rational&);
-	friend bool operator <= (Rational&, int);
-	friend bool operator <= (int, Rational&);
+	friend bool operator > (const Rational&, const Rational&);
+	friend bool operator > (const Rational&, int);
+	friend bool operator > (int, const Rational&);
 
-	friend bool operator > (Rational&, Rational&);
-	friend bool operator > (Rational&, int);
-	friend bool operator > (int, Rational&);
-
-	friend bool operator >= (Rational&, Rational&);
-	friend bool operator >= (Rational&, int);
-	friend bool operator >= (int, Rational&);
+	friend bool operator >= (const Rational&, const Rational&);
+	friend bool operator >= (const Rational&, int);
+	friend bool operator >= (int, const Rational&);
 
 	friend std::ostream& operator<<(std::ostream &, const Rational&);
-	friend std::istream & operator>>(std::istream &, Rational &);
+	friend std::istream& operator>>(std::istream &, Rational &);
 
 private:
+	void simplify_rational_number();
 	int m_num;
 	int m_denom;
-	void get_canonical_function();
 };
-
-
-
