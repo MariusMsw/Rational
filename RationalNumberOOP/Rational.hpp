@@ -7,11 +7,12 @@ Author: Mihai Liviu-Marius
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <fstream>
 
 class Rational
 {
 public:
-	Rational(int num = 0, int denom = 0);
+	Rational(int num = 0, int denom = 1);
 	Rational(const Rational&);
 	~Rational();
 
@@ -24,6 +25,9 @@ public:
 	int get_denom() const;
 
 	std::string rational_to_string();
+	operator int();
+	operator double();
+	operator std::string();
 
 	Rational &operator += (const Rational&);
 	Rational &operator += (int);

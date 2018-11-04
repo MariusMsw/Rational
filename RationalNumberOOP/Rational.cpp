@@ -21,6 +21,21 @@ std::string Rational::rational_to_string()
 	return string_number;
 }
 
+Rational::operator int()
+{
+	return m_num / m_denom;
+}
+
+Rational::operator double()
+{
+	return (double)m_num / (double)m_denom;
+}
+
+Rational::operator std::string()
+{
+	return (*this).rational_to_string();
+}
+
 void Rational::simplify_rational_number()
 {
 	int copy_num = abs(this->m_num);
@@ -45,13 +60,21 @@ void Rational::simplify_rational_number()
 		this->m_num = -(this->m_num);
 		this->m_denom = -(this->m_denom);
 	}
+	else if ((this->m_num > 0) && (this->m_denom < 0))
+	{
+		this->m_num = -(this->m_num);
+		this->m_denom = (this->m_denom);
+	}
 }
 
 Rational::Rational(int num, int denom)
-{	
-	if (denom == 0)
-	{
-		std::cout << "The denominator can't be 0!";
+{
+	try {
+		if (denom == 0)
+			throw 0;
+	}
+	catch (...) {
+		std::cout << "Denom can't be 0!";
 		exit(0);
 	}
 
@@ -68,7 +91,7 @@ Rational::Rational(int num, int denom)
 	}
 
 	if (num != 0 && denom != 1)
-	simplify_rational_number();
+		simplify_rational_number();
 }
 
 Rational::Rational(const Rational &rational)
@@ -84,14 +107,23 @@ Rational::~Rational()
 
 void Rational::set_num_and_denom(int num_value, int denom_value)
 {
+	try
+	{
+		if (denom_value == 0)
+			throw 0;
+	}
+	catch (...) {
+		std::cout << "Denom can't be 0!";
+		exit(0);
+	}
 	this->m_num = num_value;
 	this->m_denom = denom_value;
 	simplify_rational_number();
 }
 
-void Rational::set_num(int value)
+void Rational::set_num(int num_value)
 {
-	this->m_num = value;
+	this->m_num = num_value;
 	simplify_rational_number();
 }
 
@@ -100,9 +132,17 @@ int Rational::get_num() const
 	return this->m_num;
 }
 
-void Rational::set_denom(int value)
+void Rational::set_denom(int denom_value)
 {
-	this->m_denom = value;
+	try {
+		if (denom_value == 0)
+			throw 0;
+	}
+	catch (...) {
+		std::cout << "Denom can't be 0!";
+		exit(0);
+	}
+	this->m_denom = denom_value;
 	simplify_rational_number();
 }
 
@@ -169,6 +209,14 @@ Rational &Rational::operator /= (const Rational &rational_number)
 
 Rational &Rational::operator /= (int integer_number)
 {
+	try {
+		if (integer_number == 0)
+			throw 0;
+	}
+	catch (...) {
+		std::cout << "Denom can't be 0!";
+		exit(0);
+}
 	m_denom *= integer_number;
 	this->simplify_rational_number();
 	return *this;
@@ -182,6 +230,7 @@ Rational & Rational::operator+()
 Rational & Rational::operator-()
 {
 	m_num *= -1;
+	this->simplify_rational_number();
 	return *this;
 }
 
@@ -189,6 +238,7 @@ Rational operator+(const Rational &left, const Rational &right)
 {
 	Rational result(left);
 	result += right;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -196,6 +246,7 @@ Rational operator+(const Rational &rational_number, int integer_number)
 {
 	Rational result(rational_number);
 	result += integer_number;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -203,6 +254,7 @@ Rational operator+(int integer_number, const Rational &rational_number)
 {
 	Rational result(rational_number);
 	result += integer_number;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -210,6 +262,7 @@ Rational operator-(const Rational &left, const Rational&right)
 {
 	Rational result(left);
 	result -= right;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -217,6 +270,7 @@ Rational operator-(const Rational &rational_number, int integer_number)
 {
 	Rational result(rational_number);
 	result -= integer_number;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -224,6 +278,7 @@ Rational operator-(int integer_number, const Rational &rational_number)
 {
 	Rational result(rational_number);
 	result -= integer_number;
+	result.simplify_rational_number();
 	return -result;
 }
 
@@ -231,6 +286,7 @@ Rational operator*(const Rational &left, const Rational &right)
 {
 	Rational result(left);
 	result *= right;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -238,6 +294,7 @@ Rational operator*(const Rational &rational_number, int integer_number)
 {
 	Rational result(rational_number);
 	result *= integer_number;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -245,6 +302,7 @@ Rational operator*(int integer_number, const Rational &rational_number)
 {
 	Rational result(rational_number);
 	result *= integer_number;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -252,13 +310,23 @@ Rational operator/(const Rational &left, const Rational &right)
 {
 	Rational result(left);
 	result /= right;
+	result.simplify_rational_number();
 	return result;
 }
 
 Rational operator/(const Rational &rational_number, int integer_number)
 {
+	try {
+		if (integer_number == 0)
+			throw 0;
+	}
+	catch (...) {
+		std::cout << "Denom can't be 0!";
+		exit(0);
+}
 	Rational result(rational_number);
 	result /= integer_number;
+	result.simplify_rational_number();
 	return result;
 }
 
@@ -266,11 +334,21 @@ Rational operator/(int integer_number, const Rational &rational_number)
 {
 	Rational result(rational_number);
 	result /= integer_number;
+	result.simplify_rational_number();
 	return result^(-1);
 }
 
 Rational operator^(const Rational &base, int exponent)
 {
+	try {
+		if (base.m_num == 0 && exponent == 0)
+			throw 0;
+	}
+	catch(...){
+		std::cout << "0^0 is forbidden!";
+		return base;
+	}
+
 	Rational result(base);
 
 	if (exponent == -1)
@@ -278,10 +356,7 @@ Rational operator^(const Rational &base, int exponent)
 		result.m_num = base.m_denom;
 		result.m_denom = base.m_num;
 
-		if (result.m_denom < 0) {
-			result.m_num *= -1;
-			result.m_denom *= -1;
-		}
+		result.simplify_rational_number();
 
 		return result;
 	}
@@ -321,26 +396,19 @@ bool operator==(int integer_number, const Rational &rational_number)
 
 bool operator!=(const Rational &first, const Rational &second)
 {
-	Rational first_copy(first), second_copy(second);
-	first_copy.simplify_rational_number();
-	second_copy.simplify_rational_number();
-	return !(first_copy == second_copy);
+	return !(first == second);
 }
 
 
 bool operator!=(const Rational &rational_number, int integer_number)
 {
-	Rational rational_number_copy(rational_number);
-	rational_number_copy.simplify_rational_number();
-	return !(rational_number_copy == integer_number);
+	return !(rational_number == integer_number);
 		
 }
 
 bool operator!=(int integer_number, const Rational &rational_number)
 {
-	Rational rational_number_copy(rational_number);
-	rational_number_copy.simplify_rational_number();
-	return !(integer_number == rational_number_copy);
+	return !(integer_number == rational_number);
 }
 
 bool operator<(const Rational &first, const Rational &second)
@@ -377,32 +445,32 @@ bool operator<=(int integer_number, const Rational &rational_number)
 
 bool operator>(const Rational &first, const Rational &second)
 {
-	return !(first < second);
+	return !(first <= second);
 }
 
 bool operator>(const Rational &rational_number, int integer_number)
 {
-	return !(rational_number < integer_number);
+	return !(rational_number <= integer_number);
 }
 
 bool operator>(int integer_number, const Rational &rational_number)
 {
-	return !(integer_number < rational_number);
+	return !(integer_number <= rational_number);
 }
 
 bool operator>=(const Rational &first, const Rational &second)
 {
-	return (first.m_num * second.m_denom >= second.m_num * first.m_denom);
+	return !(first < second);
 }
 
 bool operator>=(const Rational &rational_number, int integer_number)
 {
-	return (rational_number.m_num >= integer_number * rational_number.m_denom);
+	return !(rational_number < integer_number);
 }
 
 bool operator>=(int integer_number, const Rational &rational_number)
 {
-	return (integer_number * rational_number.m_denom >= rational_number.m_num);
+	return !(integer_number < rational_number);
 
 }
 
@@ -412,6 +480,7 @@ std::istream& operator>> (std::istream& stream, Rational& rational_number) {
 	stream >> input;
 
 	size_t backspace_pos = input.find('/');
+	
 	bool denom_exists = (backspace_pos != std::string::npos);
 
 	if (denom_exists) {
@@ -427,8 +496,10 @@ std::istream& operator>> (std::istream& stream, Rational& rational_number) {
 	return stream;
 }
 
-std::ostream & operator<<(std::ostream & stream, const Rational & rational_number)
+std::ostream & operator<<(std::ostream & stream, const Rational &rational_number)
 {
-	stream << rational_number.m_num << '/' << rational_number.m_denom;
+	Rational copy_rational(rational_number);
+	std::string string_number = (std::string)copy_rational;
+	stream << string_number;
 	return stream;
 }
