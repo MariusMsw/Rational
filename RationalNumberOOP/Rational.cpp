@@ -8,7 +8,6 @@ Author: Mihai Liviu-Marius
 
 std::string Rational::rational_to_string()
 {
-	this->simplify_rational_number();
 	std::string string_number;
 	if (m_denom == 1)
 	{
@@ -70,8 +69,8 @@ void Rational::simplify_rational_number()
 
 Rational::Rational(int num, int denom)
 {
-		if (denom == 0)
-			throw std::runtime_error("\nDenom can't be 0!\n");
+	if (denom == 0)
+		throw std::runtime_error("Denom can't be 0!");
 
 	if (denom < 0)
 	{
@@ -103,7 +102,7 @@ Rational::~Rational()
 void Rational::set_num_and_denom(int num_value, int denom_value)
 {
 	if (denom_value == 0)
-		throw std::runtime_error("\nDenom can't be 0!\n");
+		throw std::runtime_error("Denom can't be 0!");
 
 	this->m_num = num_value;
 	this->m_denom = denom_value;
@@ -124,7 +123,7 @@ int Rational::get_num() const
 void Rational::set_denom(int denom_value)
 {
 	if (denom_value == 0)
-		throw std::runtime_error("\nDenom can't be 0!\n");
+		throw std::runtime_error("Denom can't be 0!");
 
 	this->m_denom = denom_value;
 	simplify_rational_number();
@@ -185,7 +184,7 @@ Rational &Rational::operator *= (int integer_number)
 Rational &Rational::operator /= (const Rational &rational_number)
 {
 	if (rational_number.m_num == 0)
-		throw std::runtime_error("\nDivision by 0!\n");
+		throw std::runtime_error("Division by 0!");
 
 	m_num *= rational_number.m_denom; 
 	m_denom *= rational_number.m_num;
@@ -197,7 +196,7 @@ Rational &Rational::operator /= (const Rational &rational_number)
 Rational &Rational::operator /= (int integer_number)
 {
 	if (integer_number == 0)
-		throw std::runtime_error("\nDivision by 0\n");
+		throw std::runtime_error("Division by 0");
 
 	m_denom *= integer_number;
 	this->simplify_rational_number();
@@ -206,14 +205,12 @@ Rational &Rational::operator /= (int integer_number)
 
 Rational Rational::operator+()
 {
-	this->simplify_rational_number();
 	return *this;
 }
 
 Rational Rational::operator-()
 {
 	m_num *= -1;
-	this->simplify_rational_number();
 	return *this;
 }
 
@@ -283,7 +280,7 @@ Rational operator*(int integer_number, const Rational &rational_number)
 Rational operator/(const Rational &left, const Rational &right)
 {
 	if (right.m_num == 0)
-		throw std::runtime_error("\nDivision by 0\n");
+		throw std::runtime_error("Division by 0");
 
 	Rational result(left);
 	result /= right;
@@ -293,7 +290,7 @@ Rational operator/(const Rational &left, const Rational &right)
 Rational operator/(const Rational &rational_number, int integer_number)
 {
 	if (integer_number == 0)
-		throw std::runtime_error("\nDivision by 0\n");
+		throw std::runtime_error("Division by 0");
 
 	Rational result(rational_number);
 	result /= integer_number;
@@ -303,7 +300,7 @@ Rational operator/(const Rational &rational_number, int integer_number)
 Rational operator/(int integer_number, const Rational &rational_number)
 {
 	if (rational_number.m_num == 0)
-		throw std::runtime_error("\nDivision by 0\n");
+		throw std::runtime_error("Division by 0");
 
 	Rational result(rational_number);
 	result /= integer_number;
@@ -313,7 +310,7 @@ Rational operator/(int integer_number, const Rational &rational_number)
 Rational operator^(const Rational &base, int exponent)
 {
 	if (base.m_num == 0 && exponent == 0)
-		throw std::runtime_error("\nException: 0^0!\n");
+		throw std::runtime_error("Exception: 0^0!");
 
 	Rational result(base);
 
@@ -339,25 +336,18 @@ Rational operator^(const Rational &base, int exponent)
 
 bool operator==(const Rational &first, const Rational &second)
 {
-	Rational first_copy(first), second_copy(second);
-	first_copy.simplify_rational_number();
-	second_copy.simplify_rational_number();
-	return (first_copy.m_num == second_copy.m_num && first_copy.m_denom == second_copy.m_denom);
+	return (first.m_num == second.m_num && first.m_denom == second.m_denom);
 
 }
 
 bool operator==(const Rational &rational_number, int integer_number)
 {
-	Rational rational_number_copy(rational_number);
-	rational_number_copy.simplify_rational_number();
-	return (rational_number_copy.m_num / rational_number_copy.m_denom == integer_number);
+	return (rational_number.m_num / rational_number.m_denom == integer_number);
 }
 
 bool operator==(int integer_number, const Rational &rational_number)
 {
-	Rational rational_number_copy(rational_number);
-	rational_number_copy.simplify_rational_number();
-	return (rational_number_copy.m_num / rational_number_copy.m_denom == integer_number);
+	return (rational_number.m_num / rational_number.m_denom == integer_number);
 }
 
 
@@ -454,7 +444,7 @@ std::istream& operator>> (std::istream & stream, Rational& rational_number) {
 		rational_number.m_denom = std::stoi(input.substr(backspace_pos + 1, input.length()));
 		
 			if (rational_number.m_denom == 0)
-				throw std::runtime_error("\nDenom can't be 0!\n");
+				throw std::runtime_error("Denom can't be 0!");
 	}
 	else {
 		rational_number.m_num = std::stoi(input);
